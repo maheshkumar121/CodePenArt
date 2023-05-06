@@ -61,8 +61,8 @@ class Paper {
     });
 
     window.addEventListener(endEvent, () => {
-      this.holdingPaper = false;
-      this.rotating = false;
+      this.holdingPaper = true;
+      this.rotating = true;
     });
   }
 }
