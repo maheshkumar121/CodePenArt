@@ -101,3 +101,35 @@ class Paper {
 
         this.velX = this.mouseX - this.prevMouseX;
         this.velY = this.mouseY - this.prevMouseY
+        const dirX = this.mouseX - this.touchX;
+        const dirY = this.mouseY - this.touchY;
+        const dirLength = Math.sqrt(dirX * dirX + dirY * dirY);
+        const dirNormalizedX = dirX / dirLength;
+        const dirNormalizedY = dirY / dirLength;
+
+        const angle = Math.atan2(dirNormalizedY, dirNormalizedX);
+        let degrees = (180 * angle) / Math.PI;
+        degrees = (360 + Math.round(degrees)) % 360;
+        if (this.rotating) {
+          this.rotation = degrees;
+        }
+
+        if (!this.rotating) {
+          this.currentPaperX += this.velX;
+          this.currentPaperY += this.velY;
+        }
+        this.prevMouseX = this.mouseX;
+        this.prevMouseY = this.mouseY;
+
+        paper.style.transform = `translateX(${this.currentPaperX}px) translateY(${this.currentPaperY}px) rotateZ(${this.rotation}deg)`;
+      }
+    });
+  }
+}
+
+const papers = Array.from(document.querySelectorAll('.paper'));
+
+papers.forEach(paper => {
+  const p = new Paper();
+  p.init(paper);
+});
