@@ -16,17 +16,23 @@ class Paper {
   rotating = false;
 
   init(paper) {
-    document.addEventListener('mousemove', (e) => {
+    const isTouchDevice = 'ontouchstart' in window || navigator.msMaxTouchPoints;
+
+    const startEvent = isTouchDevice ? 'touchstart' : 'mousedown';
+    const moveEvent = isTouchDevice ? 'touchmove' : 'mousemove';
+    const endEvent = isTouchDevice ? 'touchend' : 'mouseup';
+
+    document.addEventListener(moveEvent, (e) => {
       if (!this.rotating) {
-        this.mouseX = e.clientX;
-        this.mouseY = e.clientY;
+        this.mouseX = isTouchDevice ? e.touches[0].clientX : e.clientX;
+        this.mouseY = isTouchDevice ? e.touches[0].clientY : e.clientY;
 
         this.velX = this.mouseX - this.prevMouseX;
         this.velY = this.mouseY - this.prevMouseY;
       }
 
-      const dirX = e.clientX - this.touchX;
-      const dirY = e.clientY - this.touchY;
+      const dirX = this.mouseX - this.touchX;
+      const dirY = this.mouseY - this.touchY;
       const dirLength = Math.sqrt(dirX * dirX + dirY * dirY);
       const dirNormalizedX = dirX / dirLength;
       const dirNormalizedY = dirY / dirLength;
@@ -50,48 +56,41 @@ class Paper {
       }
     });
 
-    paper.addEventListener('mousedown', (e) => {
+    paper.addEventListener(startEvent, (e) => {
       if (this.holdingPaper) return;
       this.holdingPaper = true;
 
       paper.style.zIndex = highestZ;
       highestZ += 1;
 
-      if (e.button === 0) {
+      if (isTouchDevice) {
+        const touch = e.touches[0];
+        this.touchX = touch.clientX;
+        this.touchY = touch.clientY;
+        this.prevMouseX = this.touchX;
+        this.prevMouseY = this.touchY;
+      } else {
         this.touchX = this.mouseX;
         this.touchY = this.mouseY;
         this.prevMouseX = this.mouseX;
         this.prevMouseY = this.mouseY;
       }
+      
       if (e.button === 2) {
         this.rotating = true;
       }
     });
 
-    paper.addEventListener('touchstart', (e) => {
-      if (this.holdingPaper) return;
-      this.holdingPaper = true;
-
-      paper.style.zIndex = highestZ;
-      highestZ += 1;
-
-      const touch = e.touches[0];
-      this.touchX = touch.clientX;
-      this.touchY = touch.clientY;
-      this.prevMouseX = this.touchX;
-      this.prevMouseY = this.touchY;
+    window.addEventListener(endEvent, () => {
+      this.holdingPaper = false;
+      this.rotating = false;
     });
+  }
+}
 
-    window.addEventListener('touchmove', (e) => {
-      e.preventDefault();
-      const touch = e.touches[0];
-      this.mouseX = touch.clientX;
-      this.mouseY = touch.clientY;
+const papers = Array.from(document.querySelectorAll('.paper'));
 
-      this.velX = this.mouseX - this.prevMouseX;
-      this.velY = this.mouseY - this.prevMouseY;
-
-      const dirX = this.mouseX - this.touchX;
-      const dirY = this.mouseY - this.touchY;
-      const dirLength = Math.sqrt(dirX * dirX + dirY * dirY);
-      const dirNormalizedX
+papers.forEach(paper => {
+  const p = new Paper();
+  p.init(paper);
+});
