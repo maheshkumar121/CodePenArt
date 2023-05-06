@@ -75,7 +75,7 @@ class Paper {
         this.prevMouseX = this.mouseX;
         this.prevMouseY = this.mouseY;
       }
-      
+
       if (e.button === 2) {
         this.rotating = true;
       }
