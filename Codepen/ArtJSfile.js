@@ -1,7 +1,7 @@
 let highestZ = 1;
 
 class Paper {
-  holdingPaper = true;
+  holdingPaper = false;
   touchX = 0;
   touchY = 0;
   offsetX = 0;
@@ -61,8 +61,8 @@ class Paper {
     });
 
     window.addEventListener(endEvent, () => {
-      this.holdingPaper = true;
-      this.rotating = true;
+      this.holdingPaper = false;
+      this.rotating = false;
     });
   }
 }
