@@ -89,6 +89,11 @@ class Paper {
   }
 }
 
-const papers = Array.from(document.querySelectorAll('.paper'));
+document.addEventListener('DOMContentLoaded', () => {
+  const papers = Array.from(document.querySelectorAll('.paper'));
 
-papers.forEach(p
+  papers.forEach(paper => {
+    const p = new Paper();
+    p.init(paper);
+  });
+});
