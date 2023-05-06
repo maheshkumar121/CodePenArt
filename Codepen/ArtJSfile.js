@@ -69,6 +69,7 @@ class Paper {
         this.touchY = touch.clientY;
         this.prevMouseX = this.touchX;
         this.prevMouseY = this.touchY;
+        e.preventDefault(); // Prevent default touchmove behavior
       } else {
         this.touchX = this.mouseX;
         this.touchY = this.mouseY;
@@ -90,7 +91,4 @@ class Paper {
 
 const papers = Array.from(document.querySelectorAll('.paper'));
 
-papers.forEach(paper => {
-  const p = new Paper();
-  p.init(paper);
-});
+papers.forEach(p
