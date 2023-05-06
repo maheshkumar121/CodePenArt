@@ -47,5 +47,18 @@
 
 <script src="https://cdn.jsdelivr.net/gh/maheshkumar121/CodePenArt/Codepen/ArtJSfile.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+	
+		  <script>
+    // Place the updated JavaScript code here
+    // ...
+
+    // Initialize draggable papers
+    const papers = Array.from(document.querySelectorAll('.paper'));
+
+    papers.forEach((paper) => {
+      const p = new Paper();
+      p.init(paper);
+    });
+  </script>
   </body>
 </html>
